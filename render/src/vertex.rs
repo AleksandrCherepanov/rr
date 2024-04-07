@@ -12,7 +12,7 @@ impl Vertex {
         Self {
             x: coords.next().unwrap(),
             y: coords.next().unwrap(),
-            z: coords.next().unwrap()
+            z: coords.next().unwrap_or_default()
         }
     }
     

@@ -1,5 +1,6 @@
 use rand::Rng;
 
+use crate::color::Texture;
 use crate::vertex::Vertex;
 use crate::light::Light;
 use crate::geometry::*;
@@ -40,7 +41,7 @@ impl<'a> Render<'a> {
     
     pub fn render_filled(&mut self, model: Model, texture: Image) {
         let light_direction = Vertex::create(0.0, 0.0, -1.0);
-        let mut zbuff = vec![vec![i32::MIN; self.geometry.image.width as usize]; self.geometry.image.height as usize];
+        
         for face in model.faces {
             let mut screen_coords: Vec<Vertex> = Vec::new();
             let mut world_coord: Vec<&Vertex> = Vec::new();
@@ -70,7 +71,11 @@ impl<'a> Render<'a> {
             let mut v3 = screen_coords[2].copy(); 
 
             if intensity > 0.0 {
-                self.geometry.polygon(&mut v1, &mut v2, &mut v3, &mut zbuff, &texture_coord, &texture, intensity);
+                let color_resolver = Texture {
+                    color_pos: &texture_coord,
+                    texture: &texture
+                };
+                self.geometry.polygon(&mut v1, &mut v2, &mut v3, &color_resolver, intensity);
             }
         }
     }
