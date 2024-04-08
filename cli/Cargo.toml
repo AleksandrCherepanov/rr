@@ -9,3 +9,7 @@ edition = "2021"
 tga = { path = "../tga" }
 render = { path = "../render" }
 clap = { version = "4.5.4", features = ["derive"] }
+
+[[bin]]
+name = "rr"
+path = "src/main.rs"

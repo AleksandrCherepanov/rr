@@ -4,6 +4,7 @@ pub mod dot;
 pub mod line;
 pub mod triangle;
 pub mod skeleton;
+pub mod model;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -96,11 +97,15 @@ pub struct SkeletonArgs {
 
 #[derive(Args)]
 pub struct ModelArgs {
+    #[arg(long, help = "Width of result image in pixels. Default: 800")]
+    pub width: Option<usize>,
+    #[arg(long, help = "Height of result image in pixels. Default: 800")]
+    pub height: Option<usize>,
     #[arg(short, long, long_help = "Path to .obj file with a model.")]
     pub source: String,
     #[arg(short, long, help = "Path to .tga file where the result will be saved.")]
     pub target: String,
-    #[arg(long = "texture", long_help = "Path to .tga file with a texture.")]
+    #[arg(long = "texture", long_help = "Path to .tga file with a texture. Default: white color is used.")]
     pub texture: Option<String>
 }
 
