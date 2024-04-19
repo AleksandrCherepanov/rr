@@ -24,34 +24,34 @@ pub static AVAILABLE_COLORS: phf::Map<&'static str, [u8; RGB_LEN]> = phf_map! {
 	"white" => WHITE
 };
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Color {
- 	pub bytes: [u8; RGB_LEN],
+    pub bytes: [u8; RGB_LEN],
 }
 
 impl Color {
-	pub fn create(r: u8, g: u8, b: u8) -> Self {
-		let mut color = Self { bytes: [0; RGB_LEN] };
-		color.bytes[0] = b;
-		color.bytes[1] = g;
-		color.bytes[2] = r;
-		
-		color
-	}
+    pub fn create(r: u8, g: u8, b: u8) -> Self {
+        let mut color = Self { bytes: [0; RGB_LEN] };
+        color.bytes[0] = b;
+        color.bytes[1] = g;
+        color.bytes[2] = r;
 
-	pub fn get_bytes(&self) -> &[u8] {
-		&self.bytes[..]
-	}
+        color
+    }
 
-	pub fn create_from_bytes(bytes: [u8; RGB_LEN]) -> Self {
-		Self {
-			bytes
-		}
-	}
+    pub fn get_bytes(&self) -> &[u8] {
+        &self.bytes[..]
+    }
 
-	pub fn mul_by_val(&mut self, val: f32) {
-		self.bytes[0] = (self.bytes[0] as f32 * val) as u8;
-		self.bytes[1] = (self.bytes[1] as f32 * val) as u8;
-		self.bytes[2] = (self.bytes[2] as f32 * val) as u8;
-	}
+    pub fn create_from_bytes(bytes: [u8; RGB_LEN]) -> Self {
+        Self {
+            bytes
+        }
+    }
+
+    pub fn mul_by_val(&mut self, val: f32) {
+        self.bytes[0] = (self.bytes[0] as f32 * val) as u8;
+        self.bytes[1] = (self.bytes[1] as f32 * val) as u8;
+        self.bytes[2] = (self.bytes[2] as f32 * val) as u8;
+    }
 }

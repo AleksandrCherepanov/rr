@@ -76,15 +76,17 @@ impl<'a> Render<'a> {
 
             if intensity > 0.0 {
                 if texture.is_some() {
-                    let color_resolver = Texture {
+                    let mut color_resolver = Texture {
                         color_pos: &texture_coord,
                         texture: texture.as_ref().unwrap(),
+                        texture_a: Vertex::create_zero(),
+                        texture_b: Vertex::create_zero(),
                     };
-                    self.geometry.polygon(&mut v1, &mut v2, &mut v3, &color_resolver, intensity);
+                    self.geometry.polygon(&mut v1, &mut v2, &mut v3, &mut color_resolver, intensity);
                 } else {
                     let color = Color::create_from_bytes(DEFAULT_COLOR);
-                    let color_resolver = RenderColor { color };
-                    self.geometry.polygon(&mut v1, &mut v2, &mut v3, &color_resolver, intensity);
+                    let mut color_resolver = RenderColor { color };
+                    self.geometry.polygon(&mut v1, &mut v2, &mut v3, &mut color_resolver, intensity);
                 }
             }
         }

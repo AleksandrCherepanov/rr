@@ -16,7 +16,6 @@ const HEIGHT_LO: usize = 14;
 const HEIGHT_HI: usize = 15;
 const BITSPERPIXEL: usize = 16;
 const IMAGEDESCRIPTOR: usize = 17;
-
 const UNCOMPRESS_RGB: u8 = 2;
 const TOP_TO_BOTTOM_ORDER: u8 = 32;
 
@@ -28,11 +27,11 @@ pub struct Header {
 
 impl Header {
     pub fn create(
-        width: u16, 
+        width: u16,
         height: u16,
     ) -> Self {
         let mut header = Self { bytes: [0; HEADER_SIZE] };
-        header.bytes[DATATYPECODE] = UNCOMPRESS_RGB; 
+        header.bytes[DATATYPECODE] = UNCOMPRESS_RGB;
         header.bytes[BITSPERPIXEL] = 24;
         header.bytes[IMAGEDESCRIPTOR] = TOP_TO_BOTTOM_ORDER;
         header.set_width(width);
@@ -58,10 +57,10 @@ impl Header {
         } else {
             let bytes = Self::split_u16_to_u8(width);
             self.bytes[WIDTH_HI] = bytes[0];
-            self.bytes[WIDTH_LO] = bytes[1]; 
+            self.bytes[WIDTH_LO] = bytes[1];
         }
     }
-    
+
     pub fn set_height(&mut self, height: u16) {
         if height < 256 {
             self.bytes[HEIGHT_HI] = 0;
@@ -69,27 +68,31 @@ impl Header {
         } else {
             let bytes = Self::split_u16_to_u8(height);
             self.bytes[HEIGHT_HI] = bytes[0];
-            self.bytes[HEIGHT_LO] = bytes[1]; 
+            self.bytes[HEIGHT_LO] = bytes[1];
         }
     }
-    
+
     pub fn get_width(&mut self) -> u16 {
         Self::union_u8_to_u16(self.bytes[WIDTH_LO], self.bytes[WIDTH_HI])
     }
-    
+
     pub fn get_height(&mut self) -> u16 {
         Self::union_u8_to_u16(self.bytes[HEIGHT_LO], self.bytes[HEIGHT_HI])
     }
-    
+
     fn union_u8_to_u16(a: u8, b: u8) -> u16 {
         (b as u16) << 8 | a as u16
     }
-    
+
     fn split_u16_to_u8(a: u16) -> [u8; 2] {
         a.to_be_bytes()
     }
 
     pub fn get_bytes(&self) -> &[u8] {
         &self.bytes[..]
+    }
+
+    pub fn is_rle(&self) -> bool {
+        self.bytes[DATATYPECODE] == 3 || self.bytes[DATATYPECODE] == 2
     }
 }

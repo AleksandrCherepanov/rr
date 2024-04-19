@@ -2,10 +2,10 @@ use tga::tgacolor::Color;
 use tga::tgaimage::Image;
 
 use std::mem;
-use std::mem::swap;
 
 use crate::color::ColorResolver;
 use crate::vertex::Vertex;
+use crate::math;
 
 pub struct Geometry<'a> {
     pub image: &'a mut Image,
@@ -15,7 +15,7 @@ pub struct Geometry<'a> {
 impl<'a> Geometry<'a> {
     pub fn create(image: &'a mut Image) -> Self {
         Self {
-            zbuff: vec![vec![i32::MIN; image.width as usize]; image.height as usize],
+            zbuff: vec![vec![i32::MIN; image.width]; image.height],
             image,
         }
     }
@@ -30,13 +30,13 @@ impl<'a> Geometry<'a> {
 
         if x1.abs_diff(x2) < y1.abs_diff(y2) {
             steep = true;
-            swap(&mut x1, &mut y1);
-            swap(&mut x2, &mut y2);
+            mem::swap(&mut x1, &mut y1);
+            mem::swap(&mut x2, &mut y2);
         }
 
         if x1 > x2 {
-            swap(&mut x1, &mut x2);
-            swap(&mut y1, &mut y2);
+            mem::swap(&mut x1, &mut x2);
+            mem::swap(&mut y1, &mut y2);
         }
 
         let dx = x2 - x1;
@@ -89,7 +89,7 @@ impl<'a> Geometry<'a> {
         a: &mut Vertex,
         b: &mut Vertex,
         c: &mut Vertex,
-        resolver: &dyn ColorResolver,
+        resolver: &mut dyn ColorResolver,
         intencity: f32,
     ) {
         if a.y == b.y && a.y == c.y {
@@ -108,26 +108,28 @@ impl<'a> Geometry<'a> {
         }
 
         let total_height = c.y - a.y;
-        for i in a.y as isize..=b.y as isize {
+        for i in a.y as isize..b.y as isize {
             let segment_height = b.y - a.y + 1.0;
-            let lslope = (i as f64 - a.y) / total_height;
-            let rslope = (i as f64 - a.y) / segment_height;
+            let lslope = math::slope(i as f64, a.y, total_height);
+            let rslope = math::slope(i as f64, a.y, segment_height);
 
             let mut x1: Vertex = a.add(&c.sub(&a).mul_by_val(lslope));
             let mut x2: Vertex = a.add(&b.sub(&a).mul_by_val(rslope));
 
-            self.fill_texture(&mut x1, &mut x2, resolver, lslope, rslope, intencity, true);
+            resolver.calculate_texture_pos(lslope, rslope, true);
+            self.fill_texture(&mut x1, &mut x2, resolver, intencity);
         }
 
-        for i in b.y as i32..=c.y as i32 {
+        for i in b.y as i32..c.y as i32 {
             let segment_height = c.y - b.y + 1.0;
-            let lslope = (i as f64 - a.y) / total_height;
-            let rslope = (i as f64 - b.y) / segment_height;
+            let lslope = math::slope(i as f64, a.y, total_height);
+            let rslope = math::slope(i as f64, b.y, segment_height);
 
             let mut x1 = a.add(&c.sub(&a).mul_by_val(lslope));
             let mut x2 = b.add(&c.sub(&b).mul_by_val(rslope));
 
-            self.fill_texture(&mut x1, &mut x2, resolver, lslope, rslope, intencity, false);
+            resolver.calculate_texture_pos(lslope, rslope, false);
+            self.fill_texture(&mut x1, &mut x2, resolver, intencity);
         }
     }
 
@@ -135,16 +137,13 @@ impl<'a> Geometry<'a> {
         &mut self,
         a: &mut Vertex,
         b: &mut Vertex,
-        color_resolver: &dyn ColorResolver,
-        lslope: f64,
-        rslope: f64,
+        color_resolver: &mut dyn ColorResolver,
         intencity: f32,
-        up: bool
     ) {
         if a.x > b.x {
             mem::swap(a, b);
+            color_resolver.swap();
         }
-
         for i in a.x as usize..=b.x as usize {
             let mut phi: f64 = 1.0;
 
@@ -158,7 +157,7 @@ impl<'a> Geometry<'a> {
                 return;
             }
 
-            let mut color = color_resolver.resolve(lslope, rslope, phi, up);
+            let mut color = color_resolver.resolve(phi);
             color.mul_by_val(intencity);
 
             if self.zbuff[p.y as usize][p.x as usize] < p.z as i32 {

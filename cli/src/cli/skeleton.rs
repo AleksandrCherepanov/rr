@@ -1,11 +1,11 @@
 use render::{
-    geometry:: Geometry,
+    geometry::Geometry,
     model::Model,
     render::Render,
 };
 use tga::{
     tgacolor::{
-        Color as TgaColor, BLUE, DARK_BLUE, GREEN, ORANGE, PURPLE, RED, WHITE, YELLOW
+        Color as TgaColor, BLUE, DARK_BLUE, GREEN, ORANGE, PURPLE, RED, WHITE, YELLOW,
     },
     tgaimage::Image,
 };

@@ -22,10 +22,10 @@ pub fn cli_triangle(args: &TrianglesArgs) -> Result<(), String> {
 
         let mut geometry = Geometry::create(&mut image);
         if args.filled {
-            let color_resolver = RenderColor {
+            let mut color_resolver = RenderColor {
                 color
             };
-            geometry.polygon(&mut a, &mut b, &mut c, &color_resolver, 1.0);
+            geometry.polygon(&mut a, &mut b, &mut c, &mut color_resolver, 1.0);
         } else {
             geometry.triangle(&mut a, &mut b, &mut c, &color);
         }
