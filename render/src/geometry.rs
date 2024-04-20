@@ -158,7 +158,7 @@ impl<'a> Geometry<'a> {
             }
 
             let mut color = color_resolver.resolve(phi);
-            color.mul_by_val(intencity);
+            color.mul(intencity);
 
             if self.zbuff[p.y as usize][p.x as usize] < p.z as i32 {
                 self.zbuff[p.y as usize][p.x as usize] = p.z as i32;
