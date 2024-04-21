@@ -1,6 +1,7 @@
 use std::{fs::OpenOptions, io::{BufRead, BufReader}};
 use crate::vertex::*;
 
+#[derive(Debug, PartialEq)]
 pub struct Face {
     pub vertices: Vec<usize>,
     pub textures: Vec<usize>,

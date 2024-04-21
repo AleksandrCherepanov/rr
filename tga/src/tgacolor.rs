@@ -6,9 +6,12 @@ use phf::phf_map;
 //Rename files without tga prefix as it already defined in the folder
 //Should always use RGB order and only writer should decide how to keep it in file
 //I think color and image files should be in render, in tga we should keep only header and reader/writer
-pub const RED: [u8; RGB_LEN] = [255, 0, 0];
+//All color is GBR now (needs to be refactored)
+// pub const RED: [u8; RGB_LEN] = [255, 0, 0];
+pub const RED: [u8; RGB_LEN] = [0, 0, 255];
 pub const ORANGE: [u8; RGB_LEN] = [255, 165, 0];
-pub const YELLOW: [u8; RGB_LEN] = [255, 255, 0];
+// pub const YELLOW: [u8; RGB_LEN] = [255, 255, 0];
+pub const YELLOW: [u8; RGB_LEN] = [0, 255, 255];
 pub const GREEN: [u8; RGB_LEN] = [0, 255, 0];
 pub const BLUE: [u8; RGB_LEN] = [173, 216, 230];
 pub const DARK_BLUE: [u8; RGB_LEN] = [0, 0, 255];

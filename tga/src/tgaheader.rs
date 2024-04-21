@@ -150,6 +150,7 @@ mod tests {
         assert_eq!(3, b[HEIGHT_HI], "higher 256 - height high byte set");
     }
 
+    #[test]
     fn header_get_width_height() {
         let mut h = Header::create(0, 0);
 
