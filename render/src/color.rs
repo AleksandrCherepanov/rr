@@ -5,9 +5,7 @@ use crate::vertex::Vertex;
 
 pub trait ColorResolver {
     fn resolve(&mut self, phi: f64) -> TgaColor;
-    fn debug(&self);
     fn calculate_texture_pos(&mut self, lslope: f64, rslope: f64, up: bool);
-
     fn swap(&mut self);
 }
 
@@ -56,10 +54,6 @@ impl<'a> ColorResolver for Texture<'a> {
     fn swap(&mut self) {
         mem::swap(&mut self.texture_a, &mut self.texture_b);
     }
-
-    fn debug(&self) {
-        println!("{:?}", self.color_pos)
-    }
 }
 
 pub struct Color {
@@ -69,10 +63,6 @@ pub struct Color {
 impl ColorResolver for Color {
     fn resolve(&mut self, _phi: f64) -> TgaColor {
         self.color
-    }
-
-    fn debug(&self) {
-        todo!()
     }
 
     fn calculate_texture_pos(&mut self, _lslope: f64, _rslope: f64, _up: bool) {}

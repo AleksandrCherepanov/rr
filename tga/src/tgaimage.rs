@@ -4,6 +4,7 @@ use std::fs::OpenOptions;
 use crate::tgacolor::*;
 use crate::tgaheader::*;
 
+#[derive(Debug)]
 pub struct Image {
     canvas: Vec<Vec<Vec<u8>>>,
     pub width: usize,
