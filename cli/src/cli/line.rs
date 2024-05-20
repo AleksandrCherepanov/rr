@@ -2,9 +2,9 @@ use std::fs;
 
 use render::{geometry::Geometry, vertex::Vertex};
 use tga::{
-    tgacolor::{Color, AVAILABLE_COLORS, DEFAULT_COLOR},
     tgaimage::Image,
 };
+use crate::cli::utils;
 
 use crate::LinesArgs;
 
@@ -18,7 +18,7 @@ pub fn cli_line(args: &LinesArgs) -> Result<(), String> {
     for l in lines {
         let data: Vec<&str> = l.trim().split(" ").collect();
         let (mut a, mut b) = extract_vertex(&data)?;
-        let color = extract_color(&data)?;
+        let color = utils::extract_color(&data, 4)?;
 
         let mut geometry = Geometry::create(&mut image);
         geometry.line(&mut a, &mut b, &color);
@@ -44,28 +44,4 @@ fn check_coordinates(data: &Vec<&str>) -> Result<(), String> {
     }
 
     Ok(())
-}
-
-fn check_color(color: &str) -> Result<(), String> {
-    if !AVAILABLE_COLORS.contains_key(color) {
-        let colors: Vec<&str> = AVAILABLE_COLORS.keys().cloned().collect();
-        return Err(format!("The color should be on of: {:?}", colors));
-    }
-
-    Ok(())
-}
-
-fn extract_color(data: &Vec<&str>) -> Result<Color, String> {
-    if data.len() <= 4 {
-        return Ok(Color::create(
-            DEFAULT_COLOR[0],
-            DEFAULT_COLOR[1],
-            DEFAULT_COLOR[2],
-        ));
-    }
-
-    check_color(data[4])?;
-
-    let color = AVAILABLE_COLORS.get(data[4]).unwrap();
-    Ok(Color::create(color[0], color[1], color[2]))
 }

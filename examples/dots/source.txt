@@ -1,12 +1,8 @@
-50 50 blue
-100 100 green
-150 150 red
-200 200 yellow
-300 300 purple
-400 100 dark_blue
-500 200 orange
-10 10
-20 10
-30 10
-10 20
-30 20
+1 1 blue
+2 2 green
+3 3 red
+4 4 yellow
+5 5 purple
+6 6 dark_blue
+7 7 orange
+8 8 white

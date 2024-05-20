@@ -160,9 +160,9 @@ impl<'a> Geometry<'a> {
             let mut color = color_resolver.resolve(phi);
             color.mul(intencity);
 
-            if self.zbuff[p.y as usize][p.x as usize] < p.z as i32 {
-                self.zbuff[p.y as usize][p.x as usize] = p.z as i32;
-                self.image.set_pixel(p.x as isize, p.y as isize, &color);
+            if self.zbuff[a.y as usize][p.x as usize] < p.z as i32 {
+                self.zbuff[a.y as usize][p.x as usize] = p.z as i32;
+                self.image.set_pixel(p.x as isize, a.y as isize, &color);
             }
         }
     }

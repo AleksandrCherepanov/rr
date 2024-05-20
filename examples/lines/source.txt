@@ -1,4 +1,4 @@
-20 20 80 20 yellow
-10 60 70 60 yellow
+20 20 80 20 red
+10 60 70 60 white
 20 20 10 60 yellow
-80 20 70 60 blue
+80 20 70 60 dark_blue

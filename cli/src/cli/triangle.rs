@@ -2,9 +2,9 @@ use std::fs;
 
 use render::{color::Color as RenderColor, geometry::Geometry, vertex::Vertex};
 use tga::{
-    tgacolor::{Color, AVAILABLE_COLORS, DEFAULT_COLOR},
     tgaimage::Image,
 };
+use crate::cli::utils;
 
 use crate::TrianglesArgs;
 
@@ -18,7 +18,7 @@ pub fn cli_triangle(args: &TrianglesArgs) -> Result<(), String> {
     for l in lines {
         let data: Vec<&str> = l.trim().split(" ").collect();
         let (mut a, mut b, mut c) = extract_vertex(&data)?;
-        let color = extract_color(&data)?;
+        let color = utils::extract_color(&data, 6)?;
 
         let mut geometry = Geometry::create(&mut image);
         if args.filled {
@@ -54,26 +54,3 @@ fn check_coordinates(data: &Vec<&str>) -> Result<(), String> {
     Ok(())
 }
 
-fn check_color(color: &str) -> Result<(), String> {
-    if !AVAILABLE_COLORS.contains_key(color) {
-        let colors: Vec<&str> = AVAILABLE_COLORS.keys().cloned().collect();
-        return Err(format!("The color should be on of: {:?}", colors));
-    }
-
-    Ok(())
-}
-
-fn extract_color(data: &Vec<&str>) -> Result<Color, String> {
-    if data.len() <= 6 {
-        return Ok(Color::create(
-            DEFAULT_COLOR[0],
-            DEFAULT_COLOR[1],
-            DEFAULT_COLOR[2],
-        ));
-    }
-
-    check_color(data[6])?;
-
-    let color = AVAILABLE_COLORS.get(data[6]).unwrap();
-    Ok(Color::create(color[0], color[1], color[2]))
-}

@@ -1,17 +1,8 @@
 use phf::phf_map;
-//TODO rewrite this module using traits
-//Color -> RGB, GBR
-//Add traits to enums and try to remove AVAILABLE_COLORS
-//Try to use enums from CLI
-//Rename files without tga prefix as it already defined in the folder
-//Should always use RGB order and only writer should decide how to keep it in file
-//I think color and image files should be in render, in tga we should keep only header and reader/writer
-//All color is GBR now (needs to be refactored)
-// pub const RED: [u8; RGB_LEN] = [255, 0, 0];
-pub const RED: [u8; RGB_LEN] = [0, 0, 255];
+
+pub const RED: [u8; RGB_LEN] = [255, 0, 0];
 pub const ORANGE: [u8; RGB_LEN] = [255, 165, 0];
-// pub const YELLOW: [u8; RGB_LEN] = [255, 255, 0];
-pub const YELLOW: [u8; RGB_LEN] = [0, 255, 255];
+pub const YELLOW: [u8; RGB_LEN] = [255, 255, 0];
 pub const GREEN: [u8; RGB_LEN] = [0, 255, 0];
 pub const BLUE: [u8; RGB_LEN] = [173, 216, 230];
 pub const DARK_BLUE: [u8; RGB_LEN] = [0, 0, 255];
@@ -31,7 +22,6 @@ pub static AVAILABLE_COLORS: phf::Map<&'static str, [u8; RGB_LEN]> = phf_map! {
 	"white" => WHITE
 };
 
-//TODO remove pub and derive
 #[derive(Copy, Clone, Debug)]
 pub struct Color {
     pub bytes: [u8; RGB_LEN],

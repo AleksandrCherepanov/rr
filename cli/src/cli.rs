@@ -5,6 +5,7 @@ pub mod line;
 pub mod triangle;
 pub mod skeleton;
 pub mod model;
+pub mod utils;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
