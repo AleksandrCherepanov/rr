@@ -77,7 +77,9 @@ impl<'a> Render<'a> {
             if intensity > 0.0 {
                 if texture.is_some() {
                     let mut color_resolver = Texture {
-                        color_pos: &texture_coord,
+                        v1: &texture_coord[0],
+                        v2: &texture_coord[1],
+                        v3: &texture_coord[2],
                         texture: texture.as_ref().unwrap(),
                         texture_a: Vertex::create_zero(),
                         texture_b: Vertex::create_zero(),

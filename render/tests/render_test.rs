@@ -89,4 +89,6 @@ fn render_filled_with_color() {
 
     let mut actual_data: Vec<u8> = vec![];
     actual_file.read_to_end(&mut actual_data).expect("can't read actual data");
+
+    assert_eq!(expected_data, actual_data);
 }

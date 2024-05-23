@@ -99,12 +99,15 @@ impl<'a> Geometry<'a> {
         // Sort triangles by Y
         if a.y > b.y {
             mem::swap(a, b);
+            resolver.adjust_ab();
         }
         if a.y > c.y {
             mem::swap(a, c);
+            resolver.adjust_ac();
         }
         if b.y > c.y {
             mem::swap(b, c);
+            resolver.adjust_bc();
         }
 
         let total_height = c.y - a.y;

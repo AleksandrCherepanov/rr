@@ -7,24 +7,35 @@ pub trait ColorResolver {
     fn resolve(&mut self, phi: f64) -> TgaColor;
     fn calculate_texture_pos(&mut self, lslope: f64, rslope: f64, up: bool);
     fn swap(&mut self);
+    fn adjust_ab(&mut self);
+    fn adjust_ac(&mut self);
+    fn adjust_bc(&mut self);
 }
 
 pub struct Texture<'a> {
-    pub color_pos: &'a Vec<Vertex>,
+    pub v1: &'a Vertex,
+    pub v2: &'a Vertex,
+    pub v3: &'a Vertex,
     pub texture: &'a Image,
     pub texture_a: Vertex,
     pub texture_b: Vertex,
 }
 
 impl<'a> ColorResolver for Texture<'a> {
-    fn calculate_texture_pos(&mut self, lslope: f64, rslope: f64, up: bool) {
-        let mut tx1 = &self.color_pos[0];
-        let mut tx2 = &self.color_pos[1];
-        let mut tx3 = &self.color_pos[2];
+    fn adjust_ab(&mut self) {
+        mem::swap(&mut self.v1, &mut self.v2);
+    }
+    fn adjust_ac(&mut self) {
+        mem::swap(&mut self.v1, &mut self.v3);
+    }
+    fn adjust_bc(&mut self) {
+        mem::swap(&mut self.v2, &mut self.v3);
+    }
 
-        if tx1.y > tx2.y { mem::swap(&mut tx1, &mut tx2); }
-        if tx1.y > tx3.y { mem::swap(&mut tx1, &mut tx3); }
-        if tx2.y > tx3.y { mem::swap(&mut tx2, &mut tx3); }
+    fn calculate_texture_pos(&mut self, lslope: f64, rslope: f64, up: bool) {
+        let tx1 = self.v1;
+        let tx2 = &self.v2;
+        let tx3 = &self.v3;
 
         let txx1: Vertex;
         let txx2: Vertex;
@@ -68,4 +79,10 @@ impl ColorResolver for Color {
     fn calculate_texture_pos(&mut self, _lslope: f64, _rslope: f64, _up: bool) {}
 
     fn swap(&mut self) {}
+
+    fn adjust_ab(&mut self) {}
+
+    fn adjust_ac(&mut self) {}
+
+    fn adjust_bc(&mut self) {}
 }
